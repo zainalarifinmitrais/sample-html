@@ -42,22 +42,22 @@ body {
   outline:none;
 }
 ::-webkit-input-placeholder {
-    color: #333333;
+    color: #bababa;
     font-style:italic;
     /* padding-left:10px; */
 }
 :-moz-placeholder {
     /* Firefox 18- */
-    color: #333333;
+    color: #bababa;
     font-style:italic;
 }
 ::-moz-placeholder {
     /* Firefox 19+ */
-    color: #333333;
+    color: #bababa;
     font-style:italic;
 }
 :-ms-input-placeholder {
-    color: #333333;
+    color: #bababa;
     font-style:italic;
 }
 header {
