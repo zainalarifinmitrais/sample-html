@@ -24,7 +24,7 @@ node {
                       passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
 	        
 	        //ZIP
-	        sh("zip ")
+	        sh("zip -r ${applicationId}.zip .")
 	        
 	        //generate random string
 	        String applicationId = randomUUID()
