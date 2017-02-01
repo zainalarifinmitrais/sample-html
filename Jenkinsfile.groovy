@@ -1,6 +1,6 @@
 //Codedeploy Config
 import static java.util.UUID.randomUUID 
-import groovy.json.*
+import groovy.json.JsonSlurperClassic
 
 
 node {
@@ -34,11 +34,15 @@ node {
 
 	        //Create Deployment
 	        def result = sh(returnStdout:true, script: "aws deploy create-deployment --application-name CDC-deploy --deployment-group-name ${stackName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${applicationId}.zip")	        
-	        def json = new JsonSlurper().parseText(result)
+	        def json = parseJson(result)
 	        String deploymentId = json.deploymentId
 
 	        //Wait until success
 	        sh("aws deploy wait deployment-successful --deployment-id ${deploymentId}")
 	    }
 	}	
+}
+
+def parseJson(String json) {
+	return new JsonSlurperClassic().parseText(json)
 }
