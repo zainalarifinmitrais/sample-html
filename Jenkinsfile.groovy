@@ -1,5 +1,6 @@
 //Codedeploy Config
 import static java.util.UUID.randomUUID 
+import groovy.json.*
 
 
 node {
@@ -33,11 +34,11 @@ node {
 
 	        //Create Deployment
 	        def result = sh(returnStdout:true, script: "aws deploy create-deployment --application-name CDC-deploy --deployment-group-name ${stackName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${applicationId}.zip")	        
-	        echo result
-	        //String deploymentId = result.matcher('deploymentId\":\\s\"(.*)\"')
+	        def json = new JsonSlurper().parseText(result)
+	        String deploymentId = json.deploymentId
 
 	        //Wait until success
-	        //sh("aws deploy wait deployment-successful --deployment-id ${deploymentId}")
+	        sh("aws deploy wait deployment-successful --deployment-id ${deploymentId}")
 	    }
 	}	
 }
