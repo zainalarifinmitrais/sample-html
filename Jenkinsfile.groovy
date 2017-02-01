@@ -29,19 +29,14 @@ node {
 	        sh("zip -r ${applicationId}.zip .")
 	        
 	        //Upload
-	        sh("aws s3 cp app.zip s3://deployment-cdc/${applicationId}.zip")
+	        sh("aws s3 cp ${applicationId}.zip s3://deployment-cdc/${applicationId}.zip")
 
 	        //Create Deployment
-	        sh("deploy create-deployment --application-name CDC-deploy --deployment-group-name ${stackName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${applicationId}.zip > .deployment_id")
-	        String deploymentId = getDeploymentId('.deployment_id')
+	        def result = sh(returnStdout:true, script: "deploy create-deployment --application-name CDC-deploy --deployment-group-name ${stackName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${applicationId}.zip")	        
+	        String deploymentId = result.matcher('deploymentId\":\\s\"(.*)\"')
 
 	        //Wait until success
 	        sh("aws deploy wait deployment-successful --deployment-id ${deploymentId}")
 	    }
 	}	
-}
-
-def getDeploymentId(fileName) {
-    def matcher = readFile(fileName) =~ 'deploymentId\":\\s\"(.*)\"'
-    matcher ? matcher[0][1] : null
 }
