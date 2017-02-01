@@ -33,10 +33,11 @@ node {
 
 	        //Create Deployment
 	        def result = sh(returnStdout:true, script: "aws deploy create-deployment --application-name CDC-deploy --deployment-group-name ${stackName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${applicationId}.zip")	        
-	        String deploymentId = result.matcher('deploymentId\":\\s\"(.*)\"')
+	        echo result
+	        //String deploymentId = result.matcher('deploymentId\":\\s\"(.*)\"')
 
 	        //Wait until success
-	        sh("aws deploy wait deployment-successful --deployment-id ${deploymentId}")
+	        //sh("aws deploy wait deployment-successful --deployment-id ${deploymentId}")
 	    }
 	}	
 }
