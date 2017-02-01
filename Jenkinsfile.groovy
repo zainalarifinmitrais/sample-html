@@ -23,12 +23,11 @@ node {
                       usernameVariable: 'AWS_ACCESS_KEY_ID',
                       passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
 	        
+	        String applicationId = randomUUID()
+
 	        //ZIP
 	        sh("zip -r ${applicationId}.zip .")
 	        
-	        //generate random string
-	        String applicationId = randomUUID()
-
 	        //Upload
 	        sh("aws s3 cp app.zip s3://deployment-cdc/${applicationId}.zip")
 
