@@ -32,7 +32,7 @@ node {
 	        sh("aws s3 cp ${applicationId}.zip s3://deployment-cdc/${applicationId}.zip")
 
 	        //Create Deployment
-	        def result = sh(returnStdout:true, script: "deploy create-deployment --application-name CDC-deploy --deployment-group-name ${stackName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${applicationId}.zip")	        
+	        def result = sh(returnStdout:true, script: "aws deploy create-deployment --application-name CDC-deploy --deployment-group-name ${stackName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${applicationId}.zip")	        
 	        String deploymentId = result.matcher('deploymentId\":\\s\"(.*)\"')
 
 	        //Wait until success
