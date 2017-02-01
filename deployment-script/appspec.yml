@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /app
+    destination: /opt/bitnami/apache2/htdocs/app
+hooks:
+  ApplicationStart:
+    - location: start_service
+      timeout: 300
+      runas: root
