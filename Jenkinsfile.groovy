@@ -5,6 +5,7 @@ node {
     env.AWS_DEFAULT_REGION = 'ap-southeast-1'
 	
 	String trainerName = 'fajar'
+	String groupName = 'achmad'
 
 	//Cleanup workspace
 	deleteDir()
@@ -17,7 +18,7 @@ node {
 	stage("Sonar Analyze") {
 		def scannerHome = tool 'default';
 	    withSonarQubeEnv('default') {
-	      sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${trainerName} -Dsonar.sources=app"
+	      sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${groupName} -Dsonar.sources=app"
 	    }
 	}
 	
@@ -31,13 +32,13 @@ node {
 	        
 
 	        //Zip artifact
-	        sh("zip -r ${env.JOB_NAME}.zip .")
+	        sh("zip -r ${groupName}.zip .")
 	        
 	        //Upload artifact to S3
-	        sh("aws s3 cp ${env.JOB_NAME}.zip s3://deployment-cdc/${env.JOB_NAME}.zip")
+	        sh("aws s3 cp ${groupName}.zip s3://deployment-cdc/${groupName}.zip")
 
 	        //Create Deployment
-	        def result = sh(returnStdout:true, script: "aws deploy create-deployment --application-name CDC-deploy --deployment-group-name ${trainerName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${env.JOB_NAME}.zip")	        
+	        def result = sh(returnStdout:true, script: "aws deploy create-deployment --application-name CDC-deploy --deployment-group-name ${groupName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${groupName}.zip")	        
 	        def json = parseJson(result)
 	        String deploymentId = json.deploymentId
 
