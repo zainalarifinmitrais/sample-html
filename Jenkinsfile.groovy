@@ -6,7 +6,7 @@ import groovy.json.JsonSlurperClassic
 node {
     env.AWS_DEFAULT_REGION = 'ap-southeast-1'
 	
-	String stackName = 'cdc-fajar'
+	String trainerName = 'fajar'
 
 	deleteDir()
 	stage('Checkout') {
@@ -24,16 +24,16 @@ node {
                       usernameVariable: 'AWS_ACCESS_KEY_ID',
                       passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
 	        
-	        String applicationId = randomUUID()
+	        
 
 	        //ZIP
-	        sh("zip -r ${applicationId}.zip .")
+	        sh("zip -r ${env.JOB_NAME}.zip .")
 	        
 	        //Upload
-	        sh("aws s3 cp ${applicationId}.zip s3://deployment-cdc/${applicationId}.zip")
+	        sh("aws s3 cp ${applicationId}.zip s3://deployment-cdc/${env.JOB_NAME}.zip")
 
 	        //Create Deployment
-	        def result = sh(returnStdout:true, script: "aws deploy create-deployment --application-name CDC-deploy --deployment-group-name ${stackName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${applicationId}.zip")	        
+	        def result = sh(returnStdout:true, script: "aws deploy create-deployment --application-name CDC-deploy --deployment-group-name ${trainerName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${env.JOB_NAME}.zip")	        
 	        def json = parseJson(result)
 	        String deploymentId = json.deploymentId
 
