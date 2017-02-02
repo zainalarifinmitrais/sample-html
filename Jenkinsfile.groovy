@@ -1,5 +1,3 @@
-//Codedeploy Config
-import static java.util.UUID.randomUUID 
 import groovy.json.JsonSlurperClassic
 
 
@@ -8,7 +6,9 @@ node {
 	
 	String trainerName = 'fajar'
 
+	//Cleanup workspace
 	deleteDir()
+
 	stage('Checkout') {
 		checkout scm	
 	}
@@ -20,7 +20,8 @@ node {
 	      sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=${trainerName} -Dsonar.sources=app"
 	    }
 	}
-	//deploy
+	
+
 	stage('Deploy') {
 		withCredentials([[$class          : 'UsernamePasswordMultiBinding',
                       credentialsId   : 'CdcAWS',
@@ -29,10 +30,10 @@ node {
 	        
 	        
 
-	        //ZIP
+	        //Zip artifact
 	        sh("zip -r ${env.JOB_NAME}.zip .")
 	        
-	        //Upload
+	        //Upload artifact to S3
 	        sh("aws s3 cp ${env.JOB_NAME}.zip s3://deployment-cdc/${env.JOB_NAME}.zip")
 
 	        //Create Deployment
