@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /app
-    destination: /opt/bitnami/apache2/htdocs/app
+    destination: /opt/bitnami/apache2/htdocs/achmad
 hooks:
   ApplicationStart:
     - location: start_service
