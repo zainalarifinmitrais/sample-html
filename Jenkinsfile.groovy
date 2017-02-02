@@ -30,7 +30,7 @@ node {
 	        sh("zip -r ${env.JOB_NAME}.zip .")
 	        
 	        //Upload
-	        sh("aws s3 cp ${applicationId}.zip s3://deployment-cdc/${env.JOB_NAME}.zip")
+	        sh("aws s3 cp ${env.JOB_NAME}.zip s3://deployment-cdc/${env.JOB_NAME}.zip")
 
 	        //Create Deployment
 	        def result = sh(returnStdout:true, script: "aws deploy create-deployment --application-name CDC-deploy --deployment-group-name ${trainerName} --s3-location bucket=deployment-cdc,bundleType=zip,key=${env.JOB_NAME}.zip")	        
