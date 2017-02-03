@@ -5,7 +5,7 @@ node {
     env.AWS_DEFAULT_REGION = 'ap-southeast-1'
 	
 	def applicationName = 'fajar-app' //change me
-	def deploymentGroupName = 'fajar-deployment-group' // change me
+	def deploymentGroupName = 'fajar-app' // change me
 	def s3BucketName = 'deployment-cdc'
 	
 	//Cleanup workspace
